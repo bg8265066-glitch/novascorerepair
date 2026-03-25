@@ -10,6 +10,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- QR Code Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -1195,7 +1197,7 @@
             box-shadow: 0 20px 30px -10px rgba(0,200,150,0.4);
         }
 
-        /* ===== WALLET ===== */
+        /* ===== WALLET CON BITCOIN ===== */
         .wallet-container {
             background: rgba(255,255,255,0.02);
             backdrop-filter: blur(10px);
@@ -1240,6 +1242,110 @@
 
         .step-card p {
             color: #a0b8cc;
+        }
+
+        /* Bitcoin QR y dirección */
+        .bitcoin-wallet-card {
+            background: rgba(0,0,0,0.3);
+            border-radius: 40px;
+            padding: 2rem;
+            margin: 2rem 0 1rem;
+            border: 2px solid rgba(0,200,150,0.3);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .bitcoin-wallet-card:hover {
+            border-color: #00C896;
+            box-shadow: 0 0 20px rgba(0,200,150,0.2);
+        }
+        
+        .bitcoin-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #f7931a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        
+        .bitcoin-title i {
+            font-size: 2rem;
+        }
+        
+        .qr-container {
+            display: flex;
+            justify-content: center;
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background: white;
+            border-radius: 24px;
+            display: inline-block;
+            width: auto;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        #qrcode {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        #qrcode img {
+            border-radius: 16px;
+            width: 180px;
+            height: 180px;
+        }
+        
+        .bitcoin-address {
+            background: rgba(0,0,0,0.5);
+            padding: 1rem;
+            border-radius: 50px;
+            margin: 1rem auto;
+            max-width: 90%;
+            word-break: break-all;
+            font-family: monospace;
+            font-size: 0.9rem;
+            border: 1px solid rgba(0,200,150,0.3);
+            color: #e0e0e0;
+        }
+        
+        .copy-btn {
+            background: rgba(0,200,150,0.2);
+            border: 1px solid #00C896;
+            padding: 0.6rem 1.5rem;
+            border-radius: 40px;
+            color: #00C896;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 0.5rem;
+        }
+        
+        .copy-btn:hover {
+            background: #00C896;
+            color: #0A2540;
+            transform: scale(1.02);
+        }
+        
+        .wallet-warning {
+            background: rgba(255,100,100,0.1);
+            border-left: 4px solid #ff6b6b;
+            padding: 1rem;
+            border-radius: 20px;
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: #ffaaaa;
+        }
+        
+        .wallet-warning i {
+            margin-right: 8px;
         }
 
         /* ===== LEGAL ===== */
@@ -1337,29 +1443,11 @@
             .hero-support { flex-direction: column; align-items: stretch; }
             .navbar { padding: 1rem; }
             .testimonials-mini-grid { grid-template-columns: 1fr; }
-            
-            .logo-image {
-                width: 50px;
-                height: 50px;
-            }
-            
-            .logo-text .nova {
-                font-size: 1.5rem;
-            }
-
-            .miami-office-card {
-                padding: 1.5rem;
-            }
-
-            .office-info h3 {
-                font-size: 1.5rem;
-            }
-            
-            .testimonials-header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            
+            .logo-image { width: 50px; height: 50px; }
+            .logo-text .nova { font-size: 1.5rem; }
+            .miami-office-card { padding: 1.5rem; }
+            .office-info h3 { font-size: 1.5rem; }
+            .testimonials-header { flex-direction: column; align-items: flex-start; }
             .whatsapp-float { width: 55px; height: 55px; bottom: 15px; right: 15px; }
             .whatsapp-float i { font-size: 1.8rem; }
             .whatsapp-tooltip { bottom: 85px; right: 15px; font-size: 0.75rem; white-space: nowrap; }
@@ -1604,15 +1692,35 @@
                 </div>
             </div>
 
-            <!-- Pestaña Wallet -->
+            <!-- Pestaña Wallet con Bitcoin QR y dirección -->
             <div id="tab-wallet" class="tab-content">
                 <div class="wallet-container">
                     <h2 style="font-size:2rem; color:white;"><i class="fas fa-wallet" style="color:#00C896;"></i> Cartera Binance</h2>
-                    <p style="color:#a0b8cc; margin-bottom:2rem;">Metodología de pagos para reparación de crédito</p>
+                    <p style="color:#a0b8cc; margin-bottom:1rem;">Metodología de pagos para reparación de crédito</p>
+                    
+                    <!-- Bitcoin Wallet Card (NUEVO) -->
+                    <div class="bitcoin-wallet-card">
+                        <div class="bitcoin-title">
+                            <i class="fab fa-bitcoin"></i> Bitcoin (BTC)
+                            <i class="fas fa-qrcode"></i>
+                        </div>
+                        <div class="qr-container" id="qrcode"></div>
+                        <div class="bitcoin-address" id="btcAddress">
+                            bc1plmypsvp48uj8u4ewe0xls47wndg9uuc23ulwn5tfnpt20nnpmuyquhf0q4
+                        </div>
+                        <button class="copy-btn" onclick="copyBitcoinAddress()">
+                            <i class="fas fa-copy"></i> Copiar dirección
+                        </button>
+                        <div class="wallet-warning">
+                            <i class="fas fa-exclamation-triangle"></i> 
+                            Solo envía activos de la red Bitcoin a esta dirección. Los demás activos se perderán para siempre.
+                        </div>
+                    </div>
+                    
                     <div class="steps-grid">
                         <div class="step-card"><div class="step-number">01</div><h3>Crear cuenta</h3><p>Registro en binance.com · 2FA</p></div>
                         <div class="step-card"><div class="step-number">02</div><h3>Verificación KYC</h3><p>Documento + selfie · 10min</p></div>
-                        <div class="step-card"><div class="step-number">03</div><h3>Depositar USDT</h3><p>Red BEP-20 · comisión baja</p></div>
+                        <div class="step-card"><div class="step-number">03</div><h3>Depositar BTC</h3><p>Escanea el QR o copia la dirección</p></div>
                         <div class="step-card"><div class="step-number">04</div><h3>Pagar plan</h3><p>Conecta con NovaScore</p></div>
                     </div>
                 </div>
@@ -1641,7 +1749,7 @@
     </div>
 
     <!-- ===== BOTÓN FLOTANTE DE WHATSAPP ===== -->
-    <a href="https://wa.me/34699354514?text=Quiero%20más%20información%20" 
+    <a href="https://wa.me/34699354514?text=Hola,%20quiero%20obtener%20más%20información%20sobre%20los%20servicios%20de%20NovaScore%20Repair%20y%20cómo%20pueden%20ayudarme%20a%20mejorar%20mi%20crédito.%20" 
        class="whatsapp-float" 
        target="_blank" 
        rel="noopener noreferrer">
@@ -1652,6 +1760,42 @@
     </div>
 
     <script>
+        // Bitcoin address constante
+        const BITCOIN_ADDRESS = "bc1plmypsvp48uj8u4ewe0xls47wndg9uuc23ulwn5tfnpt20nnpmuyquhf0q4";
+        
+        // Inicializar QR Code cuando la página cargue y también cuando se active la pestaña wallet
+        let qrInitialized = false;
+        
+        function initBitcoinQR() {
+            if (!qrInitialized) {
+                const qrcodeDiv = document.getElementById("qrcode");
+                if (qrcodeDiv && !qrcodeDiv.hasChildNodes()) {
+                    new QRCode(qrcodeDiv, {
+                        text: BITCOIN_ADDRESS,
+                        width: 180,
+                        height: 180,
+                        colorDark: "#000000",
+                        colorLight: "#ffffff",
+                        correctLevel: QRCode.CorrectLevel.M
+                    });
+                    qrInitialized = true;
+                }
+            }
+        }
+        
+        function copyBitcoinAddress() {
+            navigator.clipboard.writeText(BITCOIN_ADDRESS).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check"></i> ¡Copiado!';
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                }, 2000);
+            }).catch(err => {
+                alert("No se pudo copiar la dirección manualmente");
+            });
+        }
+        
         let testimoniosData = [
             { name: "Michael Thompson", country: "us", city: "Barcelona", comment: "Increíble servicio. Subí mi puntaje de crédito 120 puntos en solo 3 meses. Totalmente recomendado.", rating: 5, likes: 24, date: "Hace 2 días", verified: true },
             { name: "Sofia Laurent", country: "eu", city: "París", comment: "Excelente plataforma. La integración con Mifundo y Experian funcionó perfectamente. Mi historial crediticio mejoró significativamente.", rating: 5, likes: 18, date: "Hace 5 días", verified: true },
@@ -1775,10 +1919,19 @@
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             document.querySelectorAll('.tab-btn')[['main','dashboard','testimonials','wallet','legal'].indexOf(tab)].classList.add('active');
             if (tab === 'testimonials') renderFullTestimonials('all');
+            if (tab === 'wallet') {
+                setTimeout(() => initBitcoinQR(), 100);
+            }
         }
 
         renderMiniTestimonials();
         renderFullTestimonials('all');
+        // Inicializar QR por si la pestaña wallet ya está activa al cargar
+        setTimeout(() => {
+            if (document.getElementById('tab-wallet').classList.contains('active')) {
+                initBitcoinQR();
+            }
+        }, 200);
     </script>
 </body>
 </html>
